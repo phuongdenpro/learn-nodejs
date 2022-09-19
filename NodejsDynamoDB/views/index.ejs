@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <div class="content">
+        <form id="create" action="/" method="post" enctype="multipart/form-data">
+            <input type="text" name="ma_sp" placeholder="Nhập mã sản phẩm">
+            <input type="text" name="ten_sp" placeholder="Nhập tên sản phẩm">
+            <input type="number" name="so_luong" placeholder="Số lượng sản phẩm">
+            <input type="submit" value="Thêm sản phẩm mới">
+        </form>
+        <form id="delete"></form>
+        <table border="1">
+            <tr>
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Hình ảnh</th>
+                <th>Chọn</th>
+            </tr>
+        
+        <% for (let i=0; i < sanPhams.length; i++) { %>
+            <tr>
+                <td>
+                    <%=sanPhams[i].ma_sp%>
+                </td>
+                <td>
+                    <%=sanPhams[i].ten_sp%>
+                </td>
+                <td>
+                    <%=sanPhams[i].so_luong%>
+                </td>
+            </tr>
+            <br>
+            <% } %>
+        </table>
+    </div>
+</body>
+
+</html>
