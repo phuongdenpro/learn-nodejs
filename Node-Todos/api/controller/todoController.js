@@ -41,12 +41,12 @@ module.exports = function (app) {
     });
   });
   app.put("/api/todo", function (request, response) {
-    if (!request.body.id) {
+    if (!request.body._id) {
       return response.status(500).send("ID is required");
     } else {
       todos.update(
         {
-          _id: request.body.id,
+          _id: request.body._id,
         },
         {
           text: request.body.text,
