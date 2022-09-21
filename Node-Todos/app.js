@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const config = require('./config');
 const setupController = require('./api/controller/setupController');
+const todoController = require('./api/controller/todoController');
 
 
 const app = express();
@@ -25,6 +26,7 @@ app.set('views', path.join(__dirname, 'views'));
 mongoose.connect(config.getDbConnecttionString());
 
 setupController(app);
+todoController(app);
 
 app.get('/', function(request, response){
     response.render('index');
