@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Chat Socket.io</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" type="text/css" href="layout.css">
+    <script>
+        var socket = io("http://localhost:3000");
+        // socket.on("server-send-data", function (data) {
+        //     $("#noidung").append(data + ", ")
+        // });
+
+        socket.on("server-send-color", function (data) {
+            $("body").attr("bgColor", data);
+        })
+        $(document).ready(function () {
+            $("#loginForm").show();
+            $("#chatForm").hide();
+
+
+            
+        });
+    </script>
+    <style>
+        #wrapper{
+            width: 600px;
+            margin: auto;
+        }
+        #txtUsername{
+            background-color: transparent;
+            border: solid 1px black;
+        }
+        #left, #right{
+            min-height: 300px;
+        }
+        #left{
+            width: 30%;
+            float: left;
+            background-color: #f0f2d0;
+        }
+        #right{
+            width: 70%;
+            float: right;
+            background-color: #f0f2d0;
+        }
+        #boxTitle{
+            border: solid 1px black;
+            padding: 5px;
+            text-align: center;
+            font-weight: bold;
+        }#boxContent{
+            border: solid 1px black;
+            padding: 5px;
+            text-align: center;
+            border-top: none;
+        }
+        #listMessages{
+            height: 200px;
+            background-color: #fcead4;
+            margin-bottom: 15px;
+        }
+        #sayHi{
+            text-align: right;
+            background-color: aqua;
+        }
+        #txtMessage{
+            background-color: palegreen;
+            border: solid 1px black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="loginForm">
+            <h2>WHAT'S YOUR NAME ?</h2>
+            <input type="text" id="txtUsername">
+            <input type="button" value="Register" id="btnRegister">
+
+        </div>
+
+        <div id="chatForm">
+            <div id="left">
+                <div id="boxTitle">Users Online</div>
+                <div id="boxContent">
+                    <div class="userOnline">Phương Phan</div>
+                    <div class="userOnline">Phương Phan</div>
+                    <div class="userOnline">Phương Phan</div>
+                    <div class="userOnline">Phương Phan</div>
+                    <div class="userOnline">Phương Phan</div>
+                </div>
+            </div>
+            <div id="right">
+                <div id="sayHi">Hello <span id="currentUser">Phương</span>
+                    <input type="button" value="Logout" id="btnLogout">
+                </div>
+                <div id="listMessages"></div>
+                <input type="text" id="txtMessage">
+                <input type="button" id="btnSendMessage" value="Send"
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
