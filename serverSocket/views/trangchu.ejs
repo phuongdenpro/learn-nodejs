@@ -10,16 +10,63 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io("http://localhost:3000");
-        $(document).ready(function(){
-            $("#mrA").click(function(){
-                socket.emit("client-send-data","hello");
+        // socket.on("server-send-data", function (data) {
+        //     $("#noidung").append(data + ", ")
+        // });
+
+        socket.on("server-send-color",function(data){
+            $("body").attr("bgColor",data);
+        })
+        $(document).ready(function () {
+            // let mess = document.getElementById("mess").value;
+            // console.log(mess);
+            // $("#mrA").click(function () {
+            //     socket.emit("client-send-data", "mess");
+            // })
+
+
+            $("#do").click(function(){
+                socket.emit("client-send-color","red");
+            })
+            $("#xanh").click(function(){
+                socket.emit("client-send-color","blue");
+            })
+            $("#vang").click(function(){
+                socket.emit("client-send-color","yellow");
             })
         });
     </script>
+    <style>
+        #do,
+        #xanh,
+        #vang {
+            width: 300px;
+            height: 70px
+        }
+
+
+        #do {
+            background-color: red;
+        }
+
+        #xanh {
+            background-color: blue;
+        }
+
+        #vang {
+            background-color: yellow;
+        }
+    </style>
 </head>
 
 <body>
+    <!-- <input type="text" id="mess">
     <div id="mrA">Click send</div>
+    <h2 id="noidung"></h2> -->
+
+    <div id="do"></div>
+    <div id="xanh"></div>
+    <div id="vang"></div>
 </body>
 
 </html>

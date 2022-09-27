@@ -12,12 +12,22 @@ app.set("views", "./views");
 io.on("connection", (socket) => {
   console.log("Có người kết nối: " + socket.id);
 
-  socket.on("disconnect", () => {
-    console.log(socket.id + " ngắt kết nối");
+  // socket.on("disconnect", () => {
+  //   console.log(socket.id + " ngắt kết nối");
+  // });
+  // socket.on("client-send-data", function (data) {
+  //   console.log(socket.id + " vừa gửi dữ liệu: " + data);
+  // //  io.sockets.emit("server-send-data", data + "888");
+  // // socket.emit("server-send-data", data + "888");
+  // socket.broadcast.emit("server-send-data", data);
+  // });
+
+  socket.on("client-send-color", function(data){
+    console.log(data);
+    io.sockets.emit("server-send-color", data);
   });
-  socket.on("client-send-data", function (data) {
-    console.log(socket.id + " vừa gửi dữ liệu: " + data);
-  });
+
+  
 });
 app.get("/", function (req, res) {
   res.render("trangchu");
