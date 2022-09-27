@@ -11,9 +11,7 @@
     <link rel="stylesheet" type="text/css" href="layout.css">
     <script>
         var socket = io("http://localhost:3000");
-        // socket.on("server-send-data", function (data) {
-        //     $("#noidung").append(data + ", ")
-        // });
+        
 
         socket.on("server-send-color", function (data) {
             $("body").attr("bgColor", data);
