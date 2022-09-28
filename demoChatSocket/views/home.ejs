@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Chat Socket.io</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" type="text/css" href="layout.css">
+    <script>
+        var socket = io("http://localhost:3000");
+
+
+        socket.on("server-send-fail", function () {
+            alert("Username đã tồn tại !!!");
+        });
+        socket.on("server-send-success", function (data) {
+            $("#currentUser").html(data);
+            $("#loginForm").hide(2000);
+            $("#chatForm").show(1000);
+        });
+        socket.on("server-send-list-user", function (data) {
+            $("#boxContent").html("");
+            data.forEach(function (i) {
+                $("#boxContent").append("<div class='user'>" + i + "</div>")
+            });
+        });
+        socket.on("server-send-message", function (data) {
+            $("#listMessages").append("<div class='mess'><span style='color: red; font-weight: bold;'>" + data.username + ":</span>" + data.mess + "</div>");
+        });
+        socket.on("server-send-user-typing",function(data){
+            $("#thongbao").html(data);
+        });
+        socket.on("server-send-user-stop-typing",function(){
+            $("#thongbao").html("");
+        });
+
+
+        $(document).ready(function () {
+            $("#loginForm").show();
+            $("#chatForm").hide();
+            $("#btnRegister").click(function () {
+                socket.emit("client-send-username", $("#txtUsername").val());
+            });
+            $("#btnLogout").click(function () {
+                socket.emit("logout");
+                $("#chatForm").hide(2000);
+                $("#loginForm").show(1000);
+            });
+            $("#btnSendMessage").click(function () {
+                socket.emit("user-send-message", $("#txtMessage").val());
+            });
+            $("#txtMessage").focusin(function(){
+                socket.emit("user-typing");
+            });
+            $("#txtMessage").focusout(function(){
+                socket.emit("user-stop-typing");
+            });
+
+
+        });
+    </script>
+    <style>
+        #wrapper {
+            width: 600px;
+            margin: auto;
+        }
+
+        #txtUsername {
+            background-color: transparent;
+            border: solid 1px black;
+        }
+
+        #left,
+        #right {
+            min-height: 300px;
+        }
+
+        #left {
+            width: 30%;
+            float: left;
+            background-color: #f0f2d0;
+        }
+
+        #right {
+            width: 70%;
+            float: right;
+            background-color: #f0f2d0;
+        }
+
+        #boxTitle {
+            border: solid 1px black;
+            padding: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #boxContent {
+            border: solid 1px black;
+            padding: 5px;
+            text-align: center;
+            border-top: none;
+        }
+
+        #listMessages {
+            height: 200px;
+            background-color: #fcead4;
+            margin-bottom: 15px;
+            border: solid 1px black;
+        }
+
+        #sayHi {
+            text-align: right;
+            background-color: aqua;
+            color: forestgreen;
+            font-weight: bold;
+            border: solid 1px black;
+        }
+
+        #txtMessage {
+            background-color: palegreen;
+            border: solid 1px black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="loginForm">
+            <h2>WHAT'S YOUR NAME ?</h2>
+            <input type="text"  id="txtUsername">
+            <input type="button" value="Register" id="btnRegister">
+
+        </div>
+
+        <div id="chatForm">
+            <div id="left">
+                <div id="boxTitle">Users Online</div>
+                <div id="boxContent">
+
+                </div>
+            </div>
+            <div id="right">
+                <div id="sayHi">Hello <span id="currentUser"></span>
+                    <input type="button" value="Logout" id="btnLogout">
+                </div>
+                <div id="listMessages"></div>
+                <div id="thongbao"></div>
+                <input type="text" id="txtMessage">
+                <input type="button" id="btnSendMessage" value="Send" </div>
+
+            </div>
+        </div>
+</body>
+
+</html>
