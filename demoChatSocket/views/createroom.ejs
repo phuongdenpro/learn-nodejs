@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Chat Socket.io</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" type="text/css" href="layout.css">
+    <script>
+        var socket = io("http://localhost:3000");
+
+        socket.on("server-send-rooms",function(data){
+            $("#dsRoom").html("");
+            data.map(function(r){
+                
+                $("#dsRoom").append("<h4>" + r + "</h4>");
+            });
+        });
+        socket.on("server-send-room-sockets", function(data){
+            $("#roomHientai").html(data)
+        })
+        socket.on("server-chat", function(data){
+            $("#right").append("<div>"+data+"</div>");
+        });
+        $(document).ready(function () {
+            $("#btnCreateRoom").click(function(){
+                socket.emit("create-room", $("#txtRoom").val());
+            });
+            $("#btnChat").click(function(){
+                socket.emit("user-chat", $("#txtMessage").val());
+            })
+
+        });
+    </script>
+    <style>
+        body{
+            background-color: yellow;
+        }
+        #left {
+            width: 20%;
+            float: left;
+            border: solid 1px pink;
+        }
+        #right {
+            width: 80%;
+            float: right;
+        }
+        #roomHientai{
+            background-color: gray;
+            width: 100px;
+            float: right;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="txtRoom">
+    <input type="button" id="btnCreateRoom" value="Create Room">
+    <div id="left">
+        <h2>ROOM ĐANG CÓ</h2>
+        <div id="dsRoom"></div>
+    </div>
+    <h3 id="roomHientai">ROOM HIỆN TẠI</h3>
+    <div id="right"></div>
+    <input type="text" id="txtMessage" value="">
+    <input type="button" value="Chat" id="btnChat">
+</body>
+</html>

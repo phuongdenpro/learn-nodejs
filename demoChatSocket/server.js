@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-var server = require("http").Server(app);
+const server = require("http").Server(app);
 
 const io = require("socket.io")(server);
 
@@ -10,6 +10,7 @@ app.set("view engine", "ejs");
 app.set("views", "./views");
 
 var listUser = [];
+var listRoom = [];
 io.on("connection", (socket) => {
   console.log("Có người kết nối: " + socket.id);
 
@@ -34,23 +35,47 @@ io.on("connection", (socket) => {
       mess: data,
     });
   });
-  socket.on("user-typing", function(){
+  socket.on("user-typing", function () {
     var s = socket.Username + " is typing...";
-    io.sockets.emit("server-send-user-typing",s);
+    io.sockets.emit("server-send-user-typing", s);
   });
-  socket.on("user-stop-typing",function(){
+  socket.on("user-stop-typing", function () {
     io.sockets.emit("server-send-user-stop-typing");
   });
   socket.on("disconnect", () => {
-    console.log(socket.id+ " ngắt kết nối");
-    console.log(socket.Username+ " ngắt kết nối");
+    console.log(socket.id + " ngắt kết nối");
+    console.log(socket.Username + " ngắt kết nối");
     listUser.splice(listUser.indexOf(socket.Username), 1);
     socket.broadcast.emit("server-send-list-user", listUser);
   });
 
+  //Room chat
+  
+  socket.on("create-room", function (data) {
+    console.log(data);
+    socket.join(data);
+    socket.Phong = data;
+
+    
+    listRoom.push(socket.Phong);
+    // socket.adapter.rooms.forEach(r => {
+    //   listRoom.push(r);
+    // });
+    // for (r in socket.adapter.rooms) {
+    //   listRoom.push(r);
+    // }
+    io.sockets.emit("server-send-rooms", listRoom);
+    socket.emit("server-send-room-sockets",socket.Phong);
+    console.log(listRoom);
+  });
+  socket.on("user-chat", function(data){
+    io.sockets.in(socket.Phong).emit("server-chat",data);
+  });
+  
 });
 app.get("/", function (req, res) {
-  res.render("home");
+  // res.render("home");
+  res.render("createroom");
 });
 
 server.listen(3000, function () {
