@@ -10,7 +10,7 @@ const todoController = require('./api/controller/todoController');
 
 
 const app = express();
-const port = process.env.PORT || 3000;
+// const port = process.env.PORT || 3000;
 
 app.use('/assets', express.static(__dirname+'/public'));
 app.use(bodeParser.json());
@@ -32,6 +32,6 @@ app.get('/', function(request, response){
     response.render('index');
 });
 
-app.listen(port, function(){
-    console.log('App listening on port: ' + port);
-})
+app.listen(process.env.PORT || 3000, function(){
+    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+  });
